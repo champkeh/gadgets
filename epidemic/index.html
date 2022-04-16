@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://unpkg.com/frappe-charts@1.6.1/dist/frappe-charts.min.umd.js"></script>
+    <style>
+        #chart1, #chart2 {
+            width: 800px;
+        }
+    </style>
+</head>
+<body>
+<div id="chart1"></div>
+<div id="chart2"></div>
+<script>
+    const dates = [
+        "04/01", "04/02", "04/03", "04/04",
+        "04/05", "04/06", "04/07", "04/08",
+        "04/09", "04/10", "04/11", "04/12",
+        "04/13", "04/14", "04/15",
+    ]
+    const dataset1 = {
+        name: "新增确诊",
+        // chartType: "line",
+        values: [
+            260, 438, 425, 268,
+            311, 322, 824, 1015,
+            1006, 914, 994, 1189,
+            2573, 3200, 3590,
+        ]
+    }
+    const dataset2 = {
+        name: "新增无症状",
+        // chartType: "line",
+        values: [
+            6051, 7788, 8581, 13086,
+            16766, 19660, 20398, 22609,
+            23937, 25173, 22348, 25141,
+            25146, 19872, 19923,
+        ]
+    }
+
+    new frappe.Chart("#chart1", {
+        title: "上海新增确诊人数",
+        data: {
+            labels: dates,
+            datasets: [dataset1],
+        },
+        type: 'line', // or 'bar', 'line', 'scatter', 'pie', 'percentage'
+        height: 350,
+        colors: ['#743ee2']
+    })
+    new frappe.Chart("#chart2", {
+        title: "上海新增无症状感染人数",
+        data: {
+            labels: dates,
+            datasets: [dataset2],
+        },
+        type: 'axis-mixed', // or 'bar', 'line', 'scatter', 'pie', 'percentage'
+        height: 350,
+        colors: ['#7cd6fd']
+    })
+</script>
+</body>
+</html>
