@@ -4,14 +4,20 @@
     <meta charset="UTF-8">
     <title>上海疫情趋势</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0,viewport-fit=cover"/>
-    <script src="https://unpkg.com/frappe-charts@1.6.1/dist/frappe-charts.min.umd.js"></script>
+<!--    <script src="./frappe-charts.min.umd.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/frappe-charts@1.2.4/dist/frappe-charts.min.iife.js"></script>
     <style>
         #chart1, #chart2 {
-            width: 800px;
+            /*width: 800px;*/
+        }
+        .note {
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
+<h1>上海市4月以来的新增确诊/无症状感染人数趋势</h1>
+<p class="note">数据来源：<a target="_blank" href="http://wsjkw.sh.gov.cn/xwfb/index.html">上海市卫生健康委员会新闻发布</a></p>
 <div id="chart1"></div>
 <div id="chart2"></div>
 <script>
@@ -23,7 +29,7 @@
     ]
     const dataset1 = {
         name: "新增确诊",
-        // chartType: "line",
+        chartType: "line",
         values: [
             260, 438, 425, 268,
             311, 322, 824, 1015,
@@ -32,14 +38,14 @@
         ]
     }
     const dataset2 = {
-        name: "新增无症状",
-        // chartType: "line",
+        name: "新增无症状感染者",
+        chartType: "line",
         values: [
             6051, 7788, 8581, 13086,
             16766, 19660, 20398, 22609,
             23937, 25173, 22348, 25141,
             25146, 19872, 19923,
-        ]
+        ],
     }
 
     new frappe.Chart("#chart1", {
@@ -47,20 +53,51 @@
         data: {
             labels: dates,
             datasets: [dataset1],
+            // yMarkers: [{ label: "临界点", value: 2500 }],
+            // yRegions: [{ label: "区间", start: 600, end: 1300 }],
         },
-        type: 'line', // or 'bar', 'line', 'scatter', 'pie', 'percentage'
+        type: 'axis-mixed', // or 'line', 'bar', 'axis-mixed', 'pie', 'percentage', 'heatmap'
         height: 350,
-        colors: ['#743ee2']
+        colors: ['#743ee2'],
+        animate: true,
+        axisOptions: {
+            xAxisMode: 'span', // 'span' or 'tick'
+            yAxisMode: 'span', // 'span' or 'tick'
+            xIsSeries: true,
+        },
+        tooltipOptions: {},
+        barOptions: {
+            spaceRatio: 0.5,
+            stacked: true,
+        },
+        lineOptions: {},
+        isNavigable: true,
+        valuesOverPoints: false,
+        truncateLegends: true,
     })
+
     new frappe.Chart("#chart2", {
         title: "上海新增无症状感染人数",
         data: {
             labels: dates,
             datasets: [dataset2],
         },
-        type: 'axis-mixed', // or 'bar', 'line', 'scatter', 'pie', 'percentage'
+        type: 'axis-mixed', // or 'line', 'bar', 'axis-mixed', 'pie', 'percentage', 'heatmap'
         height: 350,
-        colors: ['#7cd6fd']
+        colors: ['#7cd6fd'],
+        animate: true,
+        axisOptions: {
+            xAxisMode: 'span', // 'span' or 'tick'
+            yAxisMode: 'span', // 'span' or 'tick'
+            xIsSeries: true,
+        },
+        barOptions: {
+            spaceRatio: 0.5,
+            stacked: false,
+        },
+        isNavigable: true,
+        valuesOverPoints: false,
+        truncateLegends: true,
     })
 </script>
 </body>
