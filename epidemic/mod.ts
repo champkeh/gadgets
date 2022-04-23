@@ -6,7 +6,7 @@ import { serve } from "https://deno.land/std@0.114.0/http/server.ts"
  */
 async function handleRequest(request: Request): Promise<Response> {
     const { pathname } = new URL(request.url)
-    console.log(pathname)
+    console.debug(pathname)
     let filePath
     if (pathname === '/') {
         filePath = './epidemic/index.html'
@@ -61,7 +61,8 @@ function existFile(path: string): boolean {
     try {
         Deno.statSync(path)
         return true
-    } catch (_) {
+    } catch (e) {
+        console.debug(e)
         return false
     }
 }
