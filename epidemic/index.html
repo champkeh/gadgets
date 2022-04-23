@@ -14,7 +14,7 @@
     <a href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MjM5NTA5NzYyMA==&scene=124#wechat_redirect">
         《上海发布》公众号</a>
 </p>
-<p class="note">更新时间：<time id="updateAt"></time></p>
+<p class="note">最后更新时间：<time id="updateAt"></time></p>
 <main>
     <article id="chart1"></article>
     <article id="chart2"></article>
@@ -31,10 +31,40 @@
     function formatDatetime(date) {
         const options = {
             year: 'numeric', month: 'numeric', day: 'numeric',
-            hour: 'numeric', minute: 'numeric', second: 'numeric',
+            hour: 'numeric', minute: 'numeric',
             hour12: false,
         }
-        timeEl.textContent = new Intl.DateTimeFormat('zh-CN', options).format(date)
+        timeEl.innerHTML = new Intl.DateTimeFormat('zh-CN', options).format(date) + `&nbsp;&nbsp;(${beautifulDateDiff(date)})`
+    }
+
+    /**
+     *
+     * @param date {Date}
+     */
+    function beautifulDateDiff(date) {
+        const now = new Date()
+        date.setHours(0, 0, 0, 0)
+        now.setHours(0, 0, 0, 0)
+        const days = ~~((now - date) / (1000 * 60 * 60 * 24))
+        if (days === 0) {
+            return '今天'
+        } else if (days === 1) {
+            return '昨天'
+        } else if (days < 7 && days > 0) {
+            return `${days}天前`
+        } else if (days < 30 && days > 0) {
+            return `${~~(days / 7)}周前`
+        } else if (days < 365 && days > 0) {
+            return `${~~(days / 30)}个月前`
+        } else if (days === -1) {
+            return '明天'
+        } else if (days > -7) {
+            return `${-days}天后`
+        } else if (days > -30) {
+            return `${~~(-days / 7)}周后`
+        } else if (days > -365) {
+            return `${~~(-days / 30)}个月后`
+        }
     }
 </script>
 </body>
