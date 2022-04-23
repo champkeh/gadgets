@@ -14,7 +14,7 @@ async function handleRequest(request: Request): Promise<Response> {
         filePath = `./epidemic${pathname}`
     }
 
-    if (existFile(filePath)) {
+    if (await existFile(filePath)) {
         return handleStaticFileRequest(request)
     } else {
         if (pathname.startsWith('/api')) {
@@ -57,9 +57,9 @@ async function handleStaticFileRequest(request: Request): Promise<Response> {
  * 静态文件是否存在
  * @param path 文件路径
  */
-function existFile(path: string): boolean {
+async function existFile(path: string): Promise<boolean> {
     try {
-        Deno.statSync(path)
+        await Deno.stat(path)
         return true
     } catch (e) {
         console.debug(e)
