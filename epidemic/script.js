@@ -7,15 +7,22 @@ function render(options) {
             labels: data.labels,
             datasets: [
                 {
-                    name: "新增确诊",
-                    chartType: "line",
                     values: data.data1,
                 }
             ],
+            yMarkers: [
+                {
+                    label: `${data.highestData1.date.substring(5)}  ${data.highestData1.count1}(最高点)`,
+                    value: 3590,
+                    options: {
+                        labelPos: 'right'
+                    }
+                }
+            ]
         },
-        type: 'axis-mixed', // or 'line', 'bar', 'axis-mixed', 'pie', 'percentage', 'heatmap'
+        type: 'line', // or 'line', 'bar', 'axis-mixed', 'pie', 'percentage', 'heatmap'
         height: 350,
-        colors: ['#743ee2'],
+        colors: ['#b43e18'],
         animate: true,
         axisOptions: {
             xAxisMode: 'span', // 'span' or 'tick'
@@ -23,11 +30,14 @@ function render(options) {
             xIsSeries: true,
         },
         tooltipOptions: {},
-        barOptions: {
-            spaceRatio: 0.5,
-            stacked: true,
+        lineOptions: {
+            dotSize: 4,
+            regionFill: 1,
+            hideDots: 1,
+            hideLine: 0,
+            heatline: 1,
+            spline: 0,
         },
-        lineOptions: {},
         isNavigable: true,
         valuesOverPoints: false,
         truncateLegends: true,
@@ -39,24 +49,35 @@ function render(options) {
             labels: data.labels,
             datasets: [
                 {
-                    name: "新增无症状感染者",
-                    chartType: "line",
                     values: data.data2,
                 }
             ],
+            yMarkers: [
+                {
+                    label: `${data.highestData2.date.substring(5)}  ${data.highestData2.count2}(最高点)`,
+                    value: 25173,
+                    options: {
+                        labelPos: 'right'
+                    }
+                }
+            ]
         },
-        type: 'axis-mixed', // or 'line', 'bar', 'axis-mixed', 'pie', 'percentage', 'heatmap'
+        type: 'line', // or 'line', 'bar', 'axis-mixed', 'pie', 'percentage', 'heatmap'
         height: 350,
-        colors: ['#7cd6fd'],
+        colors: ['#7b50d2'],
         animate: true,
         axisOptions: {
             xAxisMode: 'span', // 'span' or 'tick'
             yAxisMode: 'span', // 'span' or 'tick'
             xIsSeries: true,
         },
-        barOptions: {
-            spaceRatio: 0.5,
-            stacked: false,
+        lineOptions: {
+            dotSize: 4,
+            regionFill: 1,
+            hideDots: 1,
+            hideLine: 0,
+            heatline: 1,
+            spline: 0,
         },
         isNavigable: true,
         valuesOverPoints: false,

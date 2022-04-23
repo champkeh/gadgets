@@ -23,8 +23,14 @@ const data = [
     { date: '2022/04/22', count1: 2736, count2: 20634 },
 ]
 
+const cloneData = data.slice()
+const highestData1 = cloneData.sort((a, b) => a.count1 > b.count1 ? -1 : 1)[0]
+const highestData2 = cloneData.sort((a, b) => a.count2 > b.count2 ? -1 : 1)[0]
+
 export default {
     labels: data.map(item => item.date.substring(5)),
     data1: data.map(item => item.count1),
     data2: data.map(item => item.count2),
+    highestData1: highestData1,
+    highestData2: highestData2,
 }
