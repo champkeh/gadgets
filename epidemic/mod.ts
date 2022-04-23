@@ -6,7 +6,7 @@ import { serve } from "https://deno.land/std@0.114.0/http/server.ts"
  */
 async function handleRequest(request: Request): Promise<Response> {
     const { pathname } = new URL(request.url)
-    console.debug(pathname)
+    console.debug(`pathname: "${pathname}"`)
     let filePath
     if (pathname === '/') {
         filePath = './epidemic/index.html'
@@ -61,8 +61,7 @@ async function existFile(path: string): Promise<boolean> {
     try {
         await Deno.stat(path)
         return true
-    } catch (e) {
-        console.debug(e)
+    } catch (_) {
         return false
     }
 }
@@ -73,6 +72,7 @@ async function existFile(path: string): Promise<boolean> {
  */
 function mimeType(request: Request) {
     const fetchDest = request.headers.get('sec-fetch-dest')
+    console.debug(`sec-fetch-dest: "${fetchDest}"`)
     switch (fetchDest) {
         case 'document':
             return 'text/html; charset=utf-8'
