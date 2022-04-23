@@ -14,16 +14,18 @@
     <a href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MjM5NTA5NzYyMA==&scene=124#wechat_redirect">
         《上海发布》公众号</a>
 </p>
-
-<p class="note" style="visibility: hidden">更新时间：<time id="updateAt"></time></p>
+<p class="note">更新时间：<time id="updateAt"></time></p>
 <main>
     <article id="chart1"></article>
     <article id="chart2"></article>
 </main>
+<footer>
+    Deploy with <a href="https://deno.com/deploy">Deno Deploy</a>
+</footer>
 <script type="module" src="script.js"></script>
 <script>
     fetch('/api/status').then(resp => resp.json()).then(data => {
-        formatDatetime(new Date(data.updateAt))
+        formatDatetime(new Date(data.updateAt || '2022-04-23T00:00:00.000Z'))
     })
     const timeEl = document.getElementById('updateAt')
     function formatDatetime(date) {
