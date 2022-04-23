@@ -93,15 +93,15 @@ function mimeType(request: Request) {
  * 处理 api 调用
  * @param request
  */
-function handleApiRequest(request: Request): Response {
+async function handleApiRequest(request: Request): Promise<Response> {
     const { pathname } = new URL(request.url)
-    let payload
+    let payload: ApiDataPayload
     switch (pathname) {
         case '/api/status':
-            payload = fetchStatus()
+            payload = await fetchStatus()
             break
         default:
-            payload = fetchStatus()
+            payload = await fetchStatus()
     }
     return new Response(JSON.stringify(payload), {
         headers: {
@@ -114,8 +114,8 @@ interface ApiDataPayload {
     updateAt: Date
 }
 
-function fetchStatus(): ApiDataPayload {
-    const fileInfo = Deno.statSync('./epidemic/data.js')
+async function fetchStatus(): Promise<ApiDataPayload> {
+    const fileInfo = await Deno.stat('./epidemic/data.js')
     return {
         updateAt: fileInfo.mtime as Date
     }
