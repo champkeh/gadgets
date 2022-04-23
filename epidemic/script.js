@@ -14,8 +14,8 @@ function render(options) {
             ],
             yMarkers: [
                 {
-                    label: `${data.highestData1.date.substring(5)}  ${data.highestData1.count1}(最高点)`,
-                    value: 3590,
+                    label: `最高点: ${data.highestData1.date.substring(5)}  ${data.highestData1.count1}`,
+                    value: data.highestData1.count1,
                     options: {
                         labelPos: 'right'
                     }
@@ -58,8 +58,8 @@ function render(options) {
             ],
             yMarkers: [
                 {
-                    label: `${data.highestData2.date.substring(5)}  ${data.highestData2.count2}(最高点)`,
-                    value: 25173,
+                    label: `最高点: ${data.highestData2.date.substring(5)}  ${data.highestData2.count2}`,
+                    value: data.highestData2.count2,
                     options: {
                         labelPos: 'right'
                     }
