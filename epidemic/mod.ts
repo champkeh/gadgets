@@ -112,12 +112,14 @@ async function handleApiRequest(request: Request): Promise<Response> {
 
 interface ApiDataPayload {
     updateAt: Date
+    fileInfo: Deno.FileInfo
 }
 
 async function fetchStatus(): Promise<ApiDataPayload> {
     const fileInfo = await Deno.stat('./epidemic/data.js')
     return {
-        updateAt: fileInfo.mtime as Date
+        updateAt: fileInfo.mtime as Date,
+        fileInfo: fileInfo,
     }
 }
 
