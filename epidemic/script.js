@@ -1,6 +1,37 @@
-import data from './data.js'
+let fetchedData
 
-function render(options) {
+function formatDate(dateStr) {
+    const date = new Date(dateStr)
+    const year = date.getFullYear()
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    return `${year}/${('0'+month).slice(-2)}/${('0'+day).slice(-2)}`
+}
+
+fetch('/api/fetch').then(resp => resp.json()).then(data => {
+    data = data.map(item => ({
+        date: formatDate(item.date),
+        count1: item.c1,
+        count2: item.c2,
+    })).sort((a, b) => a.date > b.date ? 1 : -1)
+
+    const cloneData = data.slice()
+    const highestData1 = cloneData.sort((a, b) => a.count1 > b.count1 ? -1 : 1)[0]
+    const highestData2 = cloneData.sort((a, b) => a.count2 > b.count2 ? -1 : 1)[0]
+
+    fetchedData = {
+        labels: data.map(item => item.date.substring(5)),
+        data1: data.map(item => item.count1),
+        data2: data.map(item => item.count2),
+        highestData1: highestData1,
+        highestData2: highestData2,
+    }
+
+    // 初次渲染
+    render(fetchedData,{ valuesOverPoints: !isSmallScreen })
+})
+
+function render(data, options) {
     new frappe.Chart("#chart1", {
         title: "上海新增确诊人数",
         data: {
@@ -92,15 +123,15 @@ function render(options) {
 
 const breakpoint = 500
 let isSmallScreen = window.innerWidth <= breakpoint
-render({ valuesOverPoints: !isSmallScreen })
+
 
 window.addEventListener('resize', (event) => {
     const innerWidth = event.target.innerWidth
     if (!isSmallScreen && innerWidth <= breakpoint) {
-        render({ valuesOverPoints: false })
+        fetchedData && render(fetchedData,{ valuesOverPoints: false })
         isSmallScreen = true
     } else if (isSmallScreen && innerWidth > breakpoint) {
-        render({ valuesOverPoints: true })
+        fetchedData && render(fetchedData,{ valuesOverPoints: true })
         isSmallScreen = false
     }
 })

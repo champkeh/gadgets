@@ -21,11 +21,17 @@
 </main>
 <footer>
     Deploy with <a href="https://deno.com/deploy">Deno Deploy</a>
+    <a href="/pull.html">手动抓取</a>
 </footer>
 <script type="module" src="script.js"></script>
 <script>
-    fetch('/api/status').then(resp => resp.json()).then(data => {
-        formatDatetime(new Date(data.updateAt || '2022-04-23T00:00:00.000Z'))
+    fetch('/api/status').then(resp => resp.json()).then(resp => {
+        const {code, data, msg} = resp
+        if (code === 0) {
+            formatDatetime(new Date(data.updateAt))
+        } else {
+            alert(msg)
+        }
     })
     const timeEl = document.getElementById('updateAt')
     function formatDatetime(date) {
@@ -66,6 +72,7 @@
             return `${~~(-days / 30)}个月后`
         }
     }
+
 </script>
 </body>
 </html>
