@@ -3,140 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>上海疫情趋势</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0,viewport-fit=cover"/>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0,viewport-fit=cover"/>
     <script src="https://cdn.jsdelivr.net/npm/frappe-charts@1.2.4/dist/frappe-charts.min.iife.js"></script>
-    <style>
-        #chart1, #chart2 {
-            margin: 30px 0;
-        }
-        h1 {
-            font-size: 24px;
-            text-align: center;
-        }
-        .note {
-            text-align: center;
-            font-size: 12px;
-        }
-        main {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        main article {
-            flex: 1;
-            /*max-width: 800px;*/
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <h1>上海市4月以来的新增确诊/无症状感染人数趋势</h1>
-<p class="note">数据来源：<a href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MjM5NTA5NzYyMA==&scene=124#wechat_redirect">《上海发布》公众号</a></p>
+<p class="note">数据来源：
+    <a href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MjM5NTA5NzYyMA==&scene=124#wechat_redirect">
+        《上海发布》公众号</a>
+</p>
+
+<p class="note">更新时间：<time id="updateAt"></time></p>
 <main>
     <article id="chart1"></article>
     <article id="chart2"></article>
 </main>
+<script type="module" src="script.js"></script>
 <script>
-    const dates = [
-        "04/01", "04/02", "04/03", "04/04",
-        "04/05", "04/06", "04/07", "04/08",
-        "04/09", "04/10", "04/11", "04/12",
-        "04/13", "04/14", "04/15", "04/16",
-        "04/17", "04/18", "04/19", "04/20",
-        "04/21", "04/22",
-    ]
-    const dataset1 = {
-        name: "新增确诊",
-        chartType: "line",
-        values: [
-            260, 438, 425, 268,
-            311, 322, 824, 1015,
-            1006, 914, 994, 1189,
-            2573, 3200, 3590, 3238,
-            2417, 3084, 2494, 2634,
-            1931, 2736,
-        ]
-    }
-    const dataset2 = {
-        name: "新增无症状感染者",
-        chartType: "line",
-        values: [
-            6051, 7788, 8581, 13086,
-            16766, 19660, 20398, 22609,
-            23937, 25173, 22348, 25141,
-            25146, 19872, 19923, 21582,
-            19831, 19442, 16407, 15861,
-            15698, 20634,
-        ],
-    }
-
-    const breakpoint = 500
-    let isSmallScreen = window.innerWidth <= breakpoint
-    render({ valuesOverPoints: !isSmallScreen })
-
-    window.addEventListener('resize', (event) => {
-        const innerWidth = event.target.innerWidth
-        if (!isSmallScreen && innerWidth <= breakpoint) {
-            render({ valuesOverPoints: false })
-            isSmallScreen = true
-        } else if (isSmallScreen && innerWidth > breakpoint) {
-            render({ valuesOverPoints: true })
-            isSmallScreen = false
-        }
+    fetch('/api/status').then(resp => resp.json()).then(data => {
+        formatDatetime(new Date(data.updateAt))
     })
-
-    function render(options) {
-        new frappe.Chart("#chart1", {
-            title: "上海新增确诊人数",
-            data: {
-                labels: dates,
-                datasets: [dataset1],
-                // yMarkers: [{ label: "临界点", value: 2500 }],
-                // yRegions: [{ label: "区间", start: 600, end: 1300 }],
-            },
-            type: 'axis-mixed', // or 'line', 'bar', 'axis-mixed', 'pie', 'percentage', 'heatmap'
-            height: 350,
-            colors: ['#743ee2'],
-            animate: true,
-            axisOptions: {
-                xAxisMode: 'span', // 'span' or 'tick'
-                yAxisMode: 'span', // 'span' or 'tick'
-                xIsSeries: true,
-            },
-            tooltipOptions: {},
-            barOptions: {
-                spaceRatio: 0.5,
-                stacked: true,
-            },
-            lineOptions: {},
-            isNavigable: true,
-            valuesOverPoints: false,
-            truncateLegends: true,
-            ...options,
-        })
-        new frappe.Chart("#chart2", {
-            title: "上海新增无症状感染人数",
-            data: {
-                labels: dates,
-                datasets: [dataset2],
-            },
-            type: 'axis-mixed', // or 'line', 'bar', 'axis-mixed', 'pie', 'percentage', 'heatmap'
-            height: 350,
-            colors: ['#7cd6fd'],
-            animate: true,
-            axisOptions: {
-                xAxisMode: 'span', // 'span' or 'tick'
-                yAxisMode: 'span', // 'span' or 'tick'
-                xIsSeries: true,
-            },
-            barOptions: {
-                spaceRatio: 0.5,
-                stacked: false,
-            },
-            isNavigable: true,
-            valuesOverPoints: false,
-            truncateLegends: true,
-            ...options,
-        })
+    const timeEl = document.getElementById('updateAt')
+    function formatDatetime(date) {
+        const options = {
+            year: 'numeric', month: 'numeric', day: 'numeric',
+            hour: 'numeric', minute: 'numeric', second: 'numeric',
+            hour12: false,
+        }
+        timeEl.textContent = new Intl.DateTimeFormat('zh-CN', options).format(date)
     }
 </script>
 </body>
