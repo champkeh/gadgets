@@ -7,6 +7,8 @@ function render(options) {
             labels: data.labels,
             datasets: [
                 {
+                    name: "新增确诊",
+                    chartType: "line",
                     values: data.data1,
                 }
             ],
@@ -49,6 +51,8 @@ function render(options) {
             labels: data.labels,
             datasets: [
                 {
+                    name: "新增无症状感染者",
+                    chartType: "line",
                     values: data.data2,
                 }
             ],
