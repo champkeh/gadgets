@@ -85,7 +85,27 @@ function mimeType(request: Request) {
         case 'empty':
             return 'application/json'
         default:
-            return 'text/html; charset=utf-8'
+            // 根据文件后缀返回对应的mimetype
+            return mimeTypeFromExt(request)
+    }
+}
+
+function mimeTypeFromExt(request: Request): string {
+    const accept = request.headers.get('Accept') || '*/*'
+    const { pathname } = new URL(request.url)
+
+    if (accept.match(/text\/html/i) || pathname === '/' || pathname.match(/\.html$/i)) {
+        return 'text/html; charset=utf-8'
+    } else if (accept.match(/text\/css/i) || pathname.match(/\.css$/i)) {
+        return 'text/css; charset=utf-8'
+    } else if (pathname.match(/\.js$/i)) {
+        return 'text/javascript; charset=utf-8'
+    } else if (accept.match(/image\/\*/i)) {
+        return 'image/png'
+    } else if (pathname.match(/api/i)) {
+        return 'application/json'
+    } else {
+        return 'text/html; charset=utf-8'
     }
 }
 
