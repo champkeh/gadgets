@@ -85,6 +85,7 @@ label input {
 }
 label input::placeholder {
     font-size: 14px;
+    color: #999999;
 }
 form .actions {
     display: flex;
@@ -107,7 +108,7 @@ form button {
     border: none;
     outline: none;
     background: #4DA0FF;
-    box-shadow: 0 5px 5px 0 rgba(58,143,230,0.28);
+    box-shadow: 0 2px 5px 0 rgba(58,143,230,0.28);
     border-radius: 3px;
 }
 .btn__primary.secondly {
