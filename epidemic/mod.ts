@@ -7,11 +7,14 @@ const databaseUrl = Deno.env.get("DATABASE_URL")
 const pool = new postgres.Pool(databaseUrl, 3, true)
 
 
+/* ========================================================================== */
+
+
 /**
  * 请求处理中心
  * @param request
  */
-async function handleRequest(request: Request): Promise<Response> {
+async function gateway(request: Request): Promise<Response> {
     const {pathname} = new URL(request.url)
     console.debug(`pathname: "${pathname}"`)
     let filePath
@@ -89,9 +92,12 @@ async function handleApiRequest(request: Request): Promise<Response> {
 }
 
 
+/* ========================================================================== */
+
+
 /**
  * (api)
- * 检查状态
+ * 获取状态
  */
 async function fetchStatus(): Promise<Response> {
     const connection = await pool.connect()
@@ -117,7 +123,7 @@ async function fetchStatus(): Promise<Response> {
 
 /**
  * (api)
- * 拉取数据库数据
+ * 获取数据
  */
 async function fetchData(): Promise<Response> {
     const connection = await pool.connect()
@@ -140,8 +146,8 @@ async function fetchData(): Promise<Response> {
 
 /**
  * (api)
- * 同步数据到数据库 (从公众号提取数据保存到数据库)
- * @param url
+ * 从指定url同步数据到数据库
+ * @param url 公众号文章url
  */
 async function syncData(url: string): Promise<Response> {
     const result = await pullData(url)
@@ -286,8 +292,8 @@ type PullDataResult = PullDataSuccess | PullDataFail
 
 /**
  * (private)
- * 拉取指定url的数据，并存入数据库
- * @param url
+ * 拉取指定url解析数据
+ * @param url 公众号文章的url
  */
 async function pullData(url: string): Promise<PullDataResult> {
     console.debug('fetching', url)
@@ -362,7 +368,6 @@ async function writeToDB(data: PullDataPayload): Promise<true | string> {
     }
 }
 
-
 /**
  * (private)
  * 向浏览器返回json数据
@@ -402,5 +407,8 @@ const seeds = [
 ]
 
 
+/* ========================================================================== */
+
+
 console.log("Listening on http://localhost:8000")
-serve(handleRequest)
+serve(gateway)

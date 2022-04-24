@@ -1,4 +1,5 @@
 let fetchedData
+const mainEl = document.querySelector('main')
 
 function formatDate(dateStr) {
     const date = new Date(dateStr)
@@ -8,6 +9,7 @@ function formatDate(dateStr) {
     return `${year}/${('0'+month).slice(-2)}/${('0'+day).slice(-2)}`
 }
 
+mainEl.classList.add('loading')
 fetch('/api/fetch').then(resp => resp.json()).then(data => {
     data = data.map(item => ({
         date: formatDate(item.date),
@@ -29,6 +31,8 @@ fetch('/api/fetch').then(resp => resp.json()).then(data => {
 
     // 初次渲染
     render(fetchedData,{ valuesOverPoints: !isSmallScreen })
+}).finally(() => {
+    mainEl.classList.remove('loading')
 })
 
 function render(data, options) {

@@ -2,21 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>抓取数据</title>
+    <title>更新数据</title>
     <meta name="viewport"
           content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0,viewport-fit=cover"/>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<h1>填入文章url进行数据抓取</h1>
+<h1>填入文章url进行数据更新</h1>
 <form action="/api/pull" method="post">
     <label>
         <span>文章URL: </span>
-        <input id="url" type="text" required name="url" placeholder="请输入文章的url地址">
+        <input id="url" type="url" required name="url" placeholder="请输入文章的url地址">
     </label>
     <div class="actions">
-        <button id="manual" type="submit">手动抓取</button>
-        <button id="auto" type="button">自动抓取</button>
+        <button id="manual" class="btn__primary" type="submit">手动抓取</button>
+        <button id="auto" class="btn__primary secondly" type="button">自动抓取</button>
     </div>
 </form>
 <script>
