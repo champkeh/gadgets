@@ -15,8 +15,7 @@
         <input id="url" type="url" required name="url" placeholder="请输入文章的url地址">
     </label>
     <div class="actions">
-        <button id="manual" class="btn__primary" type="submit">手动抓取</button>
-        <button id="auto" class="btn__primary secondly" type="button">自动抓取</button>
+        <button id="manual" class="btn__primary" type="submit">更新</button>
     </div>
 </form>
 <script>
@@ -32,11 +31,6 @@ document.querySelector('form').addEventListener('submit', event => {
             document.getElementById('url').value = ''
         }
         alert(json.msg)
-    })
-})
-document.querySelector('#auto').addEventListener('click', event => {
-    fetch('/api/refresh').then(resp => resp.json()).then(data => {
-        alert(data.msg)
     })
 })
 </script>
