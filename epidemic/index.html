@@ -17,13 +17,13 @@
     <meta property="og:url" content="https://gadgets.deno.dev/" />
     <meta property="og:image" content="http://mmbiz.qpic.cn/mmbiz_jpg/qdWB7wH8tToGt7y2JW3h3nk91zUibsr4VoJn8jxW5bUmuwibyq4W6eKAiawqIRL2ELobXTMVykkib0JgJ5at8ic7CKg/0?wx_fmt=jpeg" />
     <meta property="og:description" content="上海疫情趋势" />
-    <meta property="og:site_name" content="" />
-    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="gadgets.deno.dev" />
+    <meta property="og:type" content="chart" />
     <meta property="og:article:author" content="champ" />
 
     <title>上海疫情趋势</title>
+    <link rel="stylesheet" href="css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/frappe-charts@1.2.4/dist/frappe-charts.min.iife.js"></script>
-    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <h1>上海新增确诊/无症状感染趋势</h1>
@@ -38,58 +38,9 @@
 </main>
 <footer>
     Deploy with <a href="https://deno.com/deploy">Deno Deploy</a> |
-    <a href="/pull.html">更新数据</a>
+    <a href="pull.html">更新数据</a> |
+    <a href="about.html">关于本站</a>
 </footer>
-<script type="module" src="script.js"></script>
-<script>
-    fetch('/api/status').then(resp => resp.json()).then(resp => {
-        const {code, data, msg} = resp
-        if (code === 0) {
-            formatDatetime(new Date(data.updateAt))
-        } else {
-            alert(msg)
-        }
-    })
-    const timeEl = document.getElementById('updateAt')
-    function formatDatetime(date) {
-        const options = {
-            year: 'numeric', month: 'numeric', day: 'numeric',
-            hour: 'numeric', minute: 'numeric',
-            hour12: false,
-        }
-        timeEl.innerHTML = new Intl.DateTimeFormat('zh-CN', options).format(date) + `&nbsp;&nbsp;(${beautifulDateDiff(date)})`
-    }
-
-    /**
-     *
-     * @param date {Date}
-     */
-    function beautifulDateDiff(date) {
-        const now = new Date()
-        date.setHours(0, 0, 0, 0)
-        now.setHours(0, 0, 0, 0)
-        const days = ~~((now - date) / (1000 * 60 * 60 * 24))
-        if (days === 0) {
-            return '今天'
-        } else if (days === 1) {
-            return '昨天'
-        } else if (days < 7 && days > 0) {
-            return `${days}天前`
-        } else if (days < 30 && days > 0) {
-            return `${~~(days / 7)}周前`
-        } else if (days < 365 && days > 0) {
-            return `${~~(days / 30)}个月前`
-        } else if (days === -1) {
-            return '明天'
-        } else if (days > -7) {
-            return `${-days}天后`
-        } else if (days > -30) {
-            return `${~~(-days / 7)}周后`
-        } else if (days > -365) {
-            return `${~~(-days / 30)}个月后`
-        }
-    }
-
-</script>
+<script type="module" src="js/main.js"></script>
 </body>
 </html>

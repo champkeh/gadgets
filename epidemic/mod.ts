@@ -1,11 +1,14 @@
 import {serve} from "https://deno.land/std@0.114.0/http/server.ts"
 import * as postgres from "https://deno.land/x/postgres@v0.14.0/mod.ts"
 
+// 数据库连接字符串
 const databaseUrl = Deno.env.get("DATABASE_URL")
 
 // Create a database pool with three connections that are lazily established
 const pool = new postgres.Pool(databaseUrl, 3, true)
 
+// 应用所在根目录
+const rootDir = './epidemic'
 
 /* ========================================================================== */
 
@@ -15,14 +18,13 @@ const pool = new postgres.Pool(databaseUrl, 3, true)
  * @param request
  */
 async function gateway(request: Request): Promise<Response> {
-    const {pathname} = new URL(request.url)
-    console.debug(`pathname: "${pathname}"`)
-    let filePath
+    debugPrint(request)
+
+    let {pathname} = new URL(request.url)
     if (pathname === '/') {
-        filePath = './epidemic/index.html'
-    } else {
-        filePath = `./epidemic${pathname}`
+        pathname = '/index.html'
     }
+    const filePath = `${rootDir}${pathname}`
 
     if (await existFile(filePath)) {
         return handleStaticFileRequest(request)
@@ -35,7 +37,7 @@ async function gateway(request: Request): Promise<Response> {
             const fallback = await Deno.readFile('./404.html')
             return new Response(fallback, {
                 headers: {
-                    "Content-Type": mimeType(request),
+                    "Content-Type": "text/html; charset=utf-8",
                 },
             })
         }
@@ -48,13 +50,11 @@ async function gateway(request: Request): Promise<Response> {
  * @param request
  */
 async function handleStaticFileRequest(request: Request): Promise<Response> {
-    const {pathname} = new URL(request.url)
-    let filePath
+    let {pathname} = new URL(request.url)
     if (pathname === '/') {
-        filePath = './epidemic/index.html'
-    } else {
-        filePath = `./epidemic${pathname}`
+        pathname = '/index.html'
     }
+    const filePath = `${rootDir}${pathname}`
     const fileContent = await Deno.readFile(filePath)
     return new Response(fileContent, {
         headers: {
@@ -78,14 +78,14 @@ async function handleApiRequest(request: Request): Promise<Response> {
             return fetchData()
         case '/api/sync':
             return syncData((await request.json()).url)
+        case '/api/pull':
+            return syncData((await request.formData()).get('url') as string)
         case '/api/clear':
             return clearData()
         case '/api/refresh':
             return refreshData()
-        case '/api/pull':
-            return syncData((await request.formData()).get('url') as string)
         default:
-            return Promise.resolve(new Response("Not Found", {
+            return Promise.resolve(new Response("Not API Found", {
                 status: 404,
             }))
     }
@@ -231,7 +231,6 @@ async function existFile(path: string): Promise<boolean> {
  */
 function mimeType(request: Request) {
     const fetchDest = request.headers.get('sec-fetch-dest')
-    console.debug(`sec-fetch-dest: "${fetchDest}"`)
     switch (fetchDest) {
         case 'document':
             return 'text/html; charset=utf-8'
@@ -243,6 +242,7 @@ function mimeType(request: Request) {
             return 'image/png'
         case 'empty':
             return 'application/json'
+        case 'serviceworker':
         default:
             // 根据文件后缀返回对应的mimetype
             return mimeTypeFromExt(request)
@@ -273,6 +273,18 @@ function mimeTypeFromExt(request: Request): string {
     }
 }
 
+/**
+ * 调试
+ * @param request
+ */
+function debugPrint(request: Request) {
+    const url = request.url
+    const fetchDest = request.headers.get('sec-fetch-dest')
+
+    console.debug(`url: "${url}"`)
+    console.debug(`sec-fetch-dest: "${fetchDest}"`)
+    console.log()
+}
 
 interface PullDataPayload {
     date: Date
@@ -296,7 +308,7 @@ type PullDataResult = PullDataSuccess | PullDataFail
  * @param url 公众号文章的url
  */
 async function pullData(url: string): Promise<PullDataResult> {
-    console.debug('fetching', url)
+    console.debug(`start fetch "${url}"`)
     try {
         const text = await fetch(url).then(resp => resp.text())
         const titleMatchRes = text.match(/<meta property="og:title" content="(?<title>.+?)"\s*?\/>/)
@@ -325,27 +337,26 @@ async function pullData(url: string): Promise<PullDataResult> {
                     }
                 }
             } else {
-                console.debug('Pull Data Failed: 数据提取失败')
+                console.debug(`fetch "${url}" failed: 数据提取失败`)
                 return {
                     code: 1,
                     msg: 'Pull Data Failed: 数据提取失败',
                 }
             }
         } else {
-            console.debug('Pull Data Failed: 标题提取失败')
+            console.debug(`fetch "${url}" failed: 标题提取失败`)
             return {
                 code: 1,
                 msg: 'Pull Data Failed: 标题提取失败',
             }
         }
     } catch (err) {
-        console.log(err)
+        console.error(err)
         return {
             code: 1,
             msg: err.message
         }
     }
-
 }
 
 /**
