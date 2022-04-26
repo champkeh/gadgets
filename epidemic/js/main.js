@@ -1,21 +1,21 @@
 
 // Register the service worker
-// if ('serviceWorker' in navigator) {
-//     window.addEventListener('load', async () => {
-//         try {
-//             const registration = await navigator.serviceWorker.register('/service-worker.js')
-//             if (registration.installing) {
-//                 console.log('Service worker installing')
-//             } else if (registration.waiting) {
-//                 console.log('Service worker installed')
-//             } else if (registration.active) {
-//                 console.log('Service worker active')
-//             }
-//         } catch (err) {
-//             console.log('😥 Service worker registration failed: ', err)
-//         }
-//     })
-// }
+if ('serviceWorker' in navigator) {
+    // window.addEventListener('load', async () => {
+    //     try {
+    //         const registration = await navigator.serviceWorker.register('/service-worker.js')
+    //         if (registration.installing) {
+    //             console.log('Service worker installing')
+    //         } else if (registration.waiting) {
+    //             console.log('Service worker installed')
+    //         } else if (registration.active) {
+    //             console.log('Service worker active')
+    //         }
+    //     } catch (err) {
+    //         console.log('😥 Service worker registration failed: ', err)
+    //     }
+    // })
+}
 
 
 let fetchedData = null

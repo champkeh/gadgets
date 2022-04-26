@@ -50,6 +50,7 @@ async function gateway(request: Request): Promise<Response> {
  * @param request
  */
 async function handleStaticFileRequest(request: Request): Promise<Response> {
+    console.debug('静态文件')
     let {pathname} = new URL(request.url)
     if (pathname === '/') {
         pathname = '/index.html'
@@ -69,6 +70,7 @@ async function handleStaticFileRequest(request: Request): Promise<Response> {
  * @param request
  */
 async function handleApiRequest(request: Request): Promise<Response> {
+    console.debug('API调用')
     const {pathname} = new URL(request.url)
 
     switch (pathname) {
@@ -237,12 +239,11 @@ function mimeType(request: Request) {
         case 'style':
             return 'text/css; charset=utf-8'
         case 'script':
+        case 'serviceworker':
             return 'text/javascript; charset=utf-8'
         case 'image':
             return 'image/png'
         case 'empty':
-            return 'application/json'
-        case 'serviceworker':
         default:
             // 根据文件后缀返回对应的mimetype
             return mimeTypeFromExt(request)
@@ -264,8 +265,13 @@ function mimeTypeFromExt(request: Request): string {
         return 'text/css; charset=utf-8'
     } else if (pathname.match(/\.js$/i)) {
         return 'text/javascript; charset=utf-8'
-    } else if (accept.match(/image\/\*/i)) {
-        return 'image/png'
+    } else if (accept.match(/image\/\*/i) || pathname.match(/\.(png|jpe?g|gif|bmp|ico)/i)) {
+        const imageExt = pathname.match(/\.(?<ext>png|jpe?g|gif|bmp|ico)/i)
+        if (imageExt?.groups?.ext) {
+            return `image/${imageExt.groups.ext}`
+        } else {
+            return 'image/png'
+        }
     } else if (pathname.match(/api/i)) {
         return 'application/json'
     } else {
@@ -281,9 +287,10 @@ function debugPrint(request: Request) {
     const url = request.url
     const fetchDest = request.headers.get('sec-fetch-dest')
 
+    console.log()
+    console.debug(new Date())
     console.debug(`url: "${url}"`)
     console.debug(`sec-fetch-dest: "${fetchDest}"`)
-    console.log()
 }
 
 interface PullDataPayload {

@@ -9,14 +9,16 @@ self.addEventListener('install', (event) => {
     event.waitUntil(
         addResourcesToCache([
             '/',
+            '/about.html',
+            '/fallback.html',
+            '/favicon.ico',
             '/index.html',
+            '/pull.html',
             '/css/style.css',
-            'js/main.js',
+            '/js/main.js',
+            '/js/frappe-charts.min.iife.js',
             '/api/fetch',
             '/api/status',
-            '/favicon.ico',
-            '/service-worker.js',
-            '/pull.html',
         ])
     )
 })
@@ -85,7 +87,7 @@ self.addEventListener('fetch', (event) => {
         cacheFirst({
             request: event.request,
             preloadResponsePromise: event.preloadResponse,
-            fallbackUrl: '/gallery/myLittleVader.jpg',
+            fallbackUrl: '/fallback.html',
         })
     )
 })
