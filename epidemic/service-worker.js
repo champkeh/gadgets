@@ -17,8 +17,8 @@ self.addEventListener('install', (event) => {
             '/css/style.css',
             '/js/main.js',
             '/js/frappe-charts.min.iife.js',
-            '/api/fetch',
-            '/api/status',
+            // '/api/fetch',
+            // '/api/status',
         ])
     )
 })
