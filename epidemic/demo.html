@@ -37,17 +37,17 @@
         /**
          * 引入cordova
          */
-        // const script = document.createElement('script')
-        // const pth = "https://ebsnew.boc.cn/bocphone/BocMerchant/" // 生产环境
-        // // 外网环境直接引用生产地址即可，若需新增cordova方法，另行提供DMZ区地址
-        // if (window.terminal.iPhone) {
-        //     script.src = pth + 'paylib/ios.js'
-        // } else if (window.terminal.android) {
-        //     script.src = pth + 'paylib/android.js'
-        // } else {
-        //     alert('无法识别终端类型')
-        // }
-        // document.getElementsByTagName('head')[0].appendChild(script)
+        const script = document.createElement('script')
+        const pth = "https://ebsnew.boc.cn/bocphone/BocMerchant/" // 生产环境
+        // 外网环境直接引用生产地址即可，若需新增cordova方法，另行提供DMZ区地址
+        if (window.terminal.iPhone) {
+            script.src = pth + 'paylib/ios.js'
+        } else if (window.terminal.android) {
+            script.src = pth + 'paylib/android.js'
+        } else {
+            alert('无法识别终端类型')
+        }
+        document.getElementsByTagName('head')[0].appendChild(script)
 
         /**
          * 绑定事件---调用cordova
