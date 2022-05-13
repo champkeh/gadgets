@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html,charset=utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <title>中国银行手机银行demo页</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <script src="demo.js"></script>
+</head>
+<body>
+<div class="stacks">
+    <div class="wrap wrap-justhead" style="height: 100%;box-sizing: border-box;">
+        <header class="page-head">
+            <div class="back-img back-to-native" id="back-left"><img src="images/back-icon.png"></div>
+            <h1>中国银行手机银行demo页</h1>
+        </header>
+        <section class="page-content" style=" box-sizing: border-box;padding: 0 10px">
+            <div class="logo">
+                <img src="images/logo.png">
+            </div>
+            <!--二维码图片-->
+            <div id="temImg"></div>
+            <button id="getCustomerInfo">获取加油卡客户信息</button>
+            <button id="getCustomerAllInfo">获取全量客户信息</button>
+            <button id="judge">判断是否登录</button>
+            <button id="login">跳转登录页</button>
+            <button id="payment">调起支付控件</button>
+            <button id="back">返回手机银行首页</button>
+            <button id="ticket">易商互信</button>
+            <button id="loginGetCustomerInfo">OAuth2.0登录&用户名</button>
+            <button id="weiXinShare">微信分享</button>
+            <button id="weiXinOpenMini">打开微信小程序</button>
+            <button id="getPsnActivity">活动管理平台取票</button>
+            <!--以下804加-->
+            <button id="getLocationInfo">获取当前定位信息</button>
+            <button id="getLocalImage">调摄像头&获取本地影像文件</button>
+            <button id="getInfoByCamera">OCR调摄像头获取指定信息（银行卡、身份证等）-身份证-正面</button>
+            <button id="getInfoByCameraBack">OCR调摄像头获取指定信息（银行卡、身份证等）-身份证-反面</button>
+            <button id="getInfoByCameraCard">OCR调摄像头获取指定信息（银行卡、身份证等）-银行卡</button>
+            <button id="generateQrCode">生成二维码</button>
+            <button id="decoderQrCodeH5">识别二维码-H5</button>
+            <button id="decoderQrCodeAPP">识别二维码-APP</button>
+            <button id="getSensorOfAccelerometer">监听加速度</button>
+            <button id="actionCallUp">拨打电话</button>
+            <button id="actionOpenApp">打开其他APP</button>
+            <button id="gotoMarket">跳转应用市场</button>
+        </section>
+    </div>
+</div>
+</body>
+</html>
+<style scoped>
+    /*主体部分 背景色固定为灰白*/
+    html, body {
+        font-family: "PingFangSC-Light", "Droid Sans", "Droid Sans Fallback", "Roboto", "Helvetica Neue", "Helvetica", sans-serif;
+        max-width: 640px;
+        height: 100%;
+        position: relative;
+        box-sizing: border-box;
+        font-size: 14px;
+        margin: 0 auto;
+        padding: 0;
+        color: #222;
+        /*background-color: #D3E3F2;*/
+        background-color: #f0eff5;
+    }
+
+    /*用户页面*/
+    .stacks {
+        width: 100%;
+        height: 100%;
+    }
+
+    /*页面当中只固定头部*/
+    .wrap-justhead {
+        padding-top: 44px;
+    }
+
+    /*主体*/
+    section {
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /*头部*/
+    header {
+        background: #fff;
+    }
+
+    .page-head {
+        border-bottom: 1px solid #ccc;
+        height: 44px;
+        line-height: 22px;
+        font-size: 18px;
+        text-align: center;
+        position: absolute;
+        top: 0;
+        width: 100%;
+    }
+
+    .back-img {
+        position: absolute;
+        left: 14px;
+        top: 8px;
+        width: 40px;
+        text-align: left;
+    }
+
+    h1 {
+        font-size: 16px;
+    }
+
+    .page-head img {
+        width: 9px;
+    }
+
+    .logo {
+        text-align: center;
+        margin: 15% 10% 15% 10%;
+    }
+
+    button {
+        width: 100%;
+        border-radius: 6px;
+        border: none;
+        border-bottom: 1px solid #d8d8e0;
+        line-height: 42px;
+        text-align: center;
+        margin: 20px 0;
+        font-weight: bold;
+        font-size: 14px;
+        background: #00aaee;
+        color: #fff;
+    }
+
+    #temImg {
+        position: fixed;
+        left: 10%;
+        top: 10%;
+        width: 80%;
+        display: none;
+        background-color: #7f7f7f;
+        text-align: center;
+        z-index: 100;
+    }
+
+    .inImg {
+        width: 100%;
+    }
+</style>
